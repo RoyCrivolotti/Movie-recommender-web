@@ -1,0 +1,26 @@
+{
+  "name": "servidor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "servidor.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node servidor.js",
+    "dev": "nodemon -r dotenv/config servidor.js"
+  },
+  "author": "Roy Crivolotti, roycrivolotti@gmail.com (https://roycrivolotti.github.io/)",
+  "license": "ISC",
+  "devDependencies": {
+    "dotenv": "^6.0.0",
+    "nodemon": "^1.18.4"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "mysql": "^2.16.0"
+  }
+}
