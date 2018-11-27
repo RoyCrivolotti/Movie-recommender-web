@@ -14,8 +14,7 @@
   "author": "Roy Crivolotti, roycrivolotti@gmail.com (https://roycrivolotti.github.io/)",
   "license": "ISC",
   "devDependencies": {
-    "dotenv": "^6.0.0",
-    "nodemon": "^1.18.4"
+    "dotenv": "^6.0.0"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
