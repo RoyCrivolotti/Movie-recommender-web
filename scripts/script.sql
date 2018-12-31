@@ -22,7 +22,7 @@ CREATE TABLE `genero`(
 );
 
 ALTER TABLE `pelicula`
-ADD COLUMN `genero_id` INT NOT NULL;
+ADD COLUMN `genero_id` INT;
 
 CREATE TABLE `actor`(
   `id` int NOT NULL auto_increment,
