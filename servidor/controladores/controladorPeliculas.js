@@ -52,7 +52,7 @@ function buscarPeliculas(req, res) {
 
     console.log(query);
 
-    connection.query(query, function (error, response) {
+    connection.query(query, function(error, response) {
         if (error) {
             console.log('Error: ' + error);
             return res.status(404).send("Hubo un error en la consulta");
@@ -67,7 +67,7 @@ function buscarPeliculas(req, res) {
 function buscarGeneros(req, res) {
     let query = 'SELECT * FROM genero';
 
-    connection.query(query, function (error, response) {
+    connection.query(query, function(error, response) {
         if (error) {
             console.log('Error: ' + error.message);
             return res.status(404).send('The query could not be executed properly');
@@ -136,7 +136,7 @@ function recomendarPelicula(req, res) {
 
     console.log(query);
 
-    connection.query(query, function (error, response) {
+    connection.query(query, function(error, response) {
         if (error) return res.status(404).send("Hubo un error en la consulta");
         res.send(JSON.stringify({
             'peliculas': response

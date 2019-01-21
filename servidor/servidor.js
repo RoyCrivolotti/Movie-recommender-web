@@ -1,14 +1,14 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var cors = require('cors');
-var controladorPeliculas = require('./controladores/controladorPeliculas');
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const controladorPeliculas = require('./controladores/controladorPeliculas');
 
-var app = express();
+const app = express();
 
 app.use(cors());
 
 app.use(bodyParser.urlencoded({
-  extended: true
+    extended: true,
 }));
 
 app.use(bodyParser.json());
@@ -18,8 +18,6 @@ app.get('/generos', controladorPeliculas.buscarGeneros);
 app.get('/pelicula/:id', controladorPeliculas.buscarInfoPelicula);
 app.get('/peliculas/recomendacion', controladorPeliculas.recomendarPelicula);
 
-let port = '8080';
+const port = '8080';
 
-app.listen(port, (e) => {
-  console.log('Escuchando en el puerto ' + port);
-});
+app.listen(port, () => console.log(`Escuchando en el puerto ${port}`));
