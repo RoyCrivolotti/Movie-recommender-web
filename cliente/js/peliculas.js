@@ -1,9 +1,9 @@
-var servidor = 'http://localhost:8080';
+var server = 'http://localhost:8080';
 let genres = {};
 
-$(document).ready(function () {
+$(document).ready(function() {
     // Se piden los generos al backend para cargalos en la UI
-    $.getJSON(servidor + '/generos', data => {
+    $.getJSON(server + '/generos', data => {
         let i = 1;
         Object.keys(data.generos).map(key => {
             var option = $('.genero-select option[value=\'0\']').clone();
@@ -30,7 +30,7 @@ $(document).ready(function () {
 
 function ControladorPeliculas() {
     // Recibe la pagina y la cantidad de resultados a mostrar y arma el pedido que se le va a hacer al backend para obtener las peliculas
-    this.buscarPeliculas = function (pagina, cantidad) {
+    this.buscarPeliculas = function(pagina, cantidad) {
             var self = this;
             var titulo = $('.titulo-busqueda').val();
             var genero = $('.genero-select option:selected').attr('value');
@@ -62,7 +62,7 @@ function ControladorPeliculas() {
             console.log($.param(query_params));
 
             // Sepiden las  peliculas al backend
-            $.getJSON(servidor + '/peliculas?' + $.param(query_params), data => {
+            $.getJSON(server + '/peliculas?' + $.param(query_params), data => {
                 self.cargarListado(data.peliculas);
                 self.cargarBotones(data.total);
             });
@@ -84,7 +84,7 @@ function ControladorPeliculas() {
                     pelicula.attr('id', peliculas[key].id);
 
                     // Cuando se clickea una película, se redirige la aplicación a info.html
-                    pelicula.click(function () {
+                    pelicula.click(function() {
                         console.log(`pelicula: ${peliculas[key]}, id: ${peliculas[key].id}, nombre: ${peliculas[key].titulo}`);
                         window.location.href = 'info.html?id=' + this.id;
                     });
