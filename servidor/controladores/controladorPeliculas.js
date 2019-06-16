@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+/* eslint-disable no-use-before-define */
 const connection = require('../lib/conexionbd');
 
 function buscarPeliculas(req, res) {
@@ -5,7 +7,7 @@ function buscarPeliculas(req, res) {
 		genero: {
 			value: [req.query.genero],
 			query: queryParamExists(req.query.genero)
-                ? ` genero_id = ${req.query.generos[req.query.genero]} ` : ' genero_id ',
+				? ` genero_id = ${req.query.generos[req.query.genero]} ` : ' genero_id ',
 		},
 		titulo: {
 			value: [req.query.titulo],
@@ -50,11 +52,8 @@ function buscarPeliculas(req, res) {
 	query += secondaryParams.orden.query;
 	query += secondaryParams.limit.query;
 
-	console.log(query);
-
 	connection.query(query, (error, response) => {
 		if (error) {
-			console.log(`Error: ${error}`);
 			return res.status(404).send('Hubo un error en la consulta');
 		}
 
@@ -71,33 +70,30 @@ function buscarGeneros(req, res) {
 
 	connection.query(query, (error, response) => {
 		if (error) {
-			console.log(`Error: ${error.message}`);
 			return res.status(404).send('The query could not be executed properly');
 		}
 
-		console.log(query);
-
-		res.send(JSON.stringify({
-			generos: response,
-		}));
+		return res.send(JSON.stringify({ generos: response }));
 	});
 }
 
 function buscarInfoPelicula(req, res) {
 	if (req.params.id === 'recomendacion') return;
-	const id = req.params.id;
+	const { id } = req.params.id;
 
 	let query = `SELECT * FROM pelicula INNER JOIN genero ON genero_id = genero.id WHERE pelicula.id = ${id}`;
 
 	connection.query(query, (error, response) => {
-		if (error) return res.status(404).send('There was an issue with the query');
+		if (error) {
+			return res.status(404).send('There was an issue with the query');
+		}
 
 		query = `SELECT * FROM actor_pelicula INNER JOIN actor ON actor_id = actor.id WHERE pelicula_id = ${id}`;
 
 		connection.query(query, (error_, response_) => {
 			if (error_) return res.status(404).send('There was an issue with the query');
 
-			res.send(JSON.stringify({
+			return res.send(JSON.stringify({
 				pelicula: response[0],
 				genero: response[0].nombre,
 				actores: response_,
@@ -111,7 +107,7 @@ function recomendarPelicula(req, res) {
 	const params = {
 		genero: {
 			value: [req.query.genero],
-			query: ` INNER JOIN genero ON pelicula.genero_id = genero.id WHERE genero.nombre = \'${req.query.genero}\' `,
+			query: ` INNER JOIN genero ON pelicula.genero_id = genero.id WHERE genero.nombre = '${req.query.genero}' `,
 		},
 		anio: {
 			value: [req.query.anio_inicio, req.query.anio_fin],
@@ -123,10 +119,11 @@ function recomendarPelicula(req, res) {
 		},
 	};
 
-
 	const queryLength = Object.keys(req.query).length;
 	let iteration = 0;
-	if (!(params.genero.value.every(queryParamExists)) && queryLength > 0) query += ' WHERE ';
+	if (!(params.genero.value.every(queryParamExists)) && queryLength > 0) {
+		query += ' WHERE ';
+	}
 
 	Object.keys(params).forEach(key => {
 		if (params[key].value.every(queryParamExists)) {
@@ -136,22 +133,18 @@ function recomendarPelicula(req, res) {
 		}
 	});
 
-	console.log(query);
-
 	connection.query(query, (error, response) => {
 		if (error) return res.status(404).send('Hubo un error en la consulta');
-		res.send(JSON.stringify({
-			peliculas: response,
-		}));
+		return res.send(JSON.stringify({ peliculas: response }));
 	});
-}
-
-function queryParamExists(value) {
-	return value != undefined && isStringNotEmpty(value);
 }
 
 function isStringNotEmpty(value) {
 	return value.trim().length > 0;
+}
+
+function queryParamExists(value) {
+	return value !== undefined && isStringNotEmpty(value);
 }
 
 module.exports = {

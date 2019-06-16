@@ -1,25 +1,22 @@
+/* eslint-disable no-use-before-define */
 const server = 'http://localhost:8080';
 const genres = {};
 
 $(document).ready(() => {
 	// Se piden los generos al backend para cargalos en la UI
 	$.getJSON(`${server}/generos`, data => {
-		let i = 1;
-		Object.keys(data.generos).map(key => {
+		Object.keys(data.generos).forEach((key, index) => {
 			const option = $('.genero-select option[value=\'0\']').clone();
-			genres[`${data.generos[key].nombre}`] = i;
-			i++;
+			genres[`${data.generos[key].nombre}`] = index;
 			option.attr('value', data.generos[key].nombre);
 			option.html(data.generos[key].nombre);
 			$('.genero-select').append(option);
 		});
-		console.log(`Genres: ${JSON.stringify(genres)}`);
 	});
-
 
 	const controladorPeliculas = new ControladorPeliculas();
 
-	$('.buscar').click(e => {
+	$('.buscar').click(() => {
 		$('.alerta-resultados').hide();
 		controladorPeliculas.buscarPeliculas();
 	});
@@ -35,20 +32,19 @@ function ControladorPeliculas() {
 		const titulo = $('.titulo-busqueda').val();
 		const genero = $('.genero-select option:selected').attr('value');
 		const orden = $('.orden-select option:selected').attr('value');
-		const anio = $('.anio-busqueda').val();
+		const año = $('.año-busqueda').val();
 		const requestedPage = (pagina) || 1;
 
 		// El objeto que tiene como atributos los parámetros que se le pasan al backend
-		const queryParams = {
-			pagina: requestedPage,
-		};
+		const queryParams = { pagina: requestedPage };
 
 		// Si el value de género es 0, se seleccionó la opcion 'Todos'. Si se elige ver todos los generos, no se envia ese parametro de filtro.
 		if (genero != 0) {
 			queryParams.genero = genero;
 			queryParams.generos = genres;
 		}
-		if (anio) queryParams.anio = anio;
+
+		if (año) queryParams.año = año;
 		if (titulo) queryParams.titulo = titulo;
 
 		queryParams.cantidad = (cantidad) || 52;
@@ -56,12 +52,9 @@ function ControladorPeliculas() {
 		// El value de cada opcion de la lista de seleccion de 'Ordenar por' esta formado por el nombre de la columna por la que se va a ordenar y tipo de orden, descendente o ascendente)
 
 		const ordenArray = orden.split('-');
-		queryParams.columna_orden = ordenArray[0];
-		queryParams.tipo_orden = ordenArray[1];
+		[queryParams.columna_orden, queryParams.tipo_orden] = ordenArray;
 
-		console.log($.param(queryParams));
-
-		// Sepiden las  peliculas al backend
+		// Se piden las peliculas al backend
 		$.getJSON(`${server}/peliculas?${$.param(queryParams)}`, data => {
 			self.cargarListado(data.peliculas);
 			self.cargarBotones(data.total);
@@ -73,7 +66,7 @@ function ControladorPeliculas() {
 		// Se vacia el contenedor de las peliculas
 		$('.contenedor-peliculas').empty();
 		// Si no hay resultados, se muestra la alerta
-		if (peliculas.length == 0) $('.alerta-resultados').show();
+		if (peliculas.length === 0) $('.alerta-resultados').show();
 		else {
 			Object.keys(peliculas).forEach(key => {
 				// Se cargan los datos de las películas
@@ -85,7 +78,6 @@ function ControladorPeliculas() {
 
 				// Cuando se clickea una película, se redirige la aplicación a info.html
 				pelicula.click(function () {
-					console.log(`pelicula: ${peliculas[key]}, id: ${peliculas[key].id}, nombre: ${peliculas[key].titulo}`);
 					window.location.href = `info.html?id=${this.id}`;
 				});
 
@@ -116,7 +108,7 @@ function ControladorPeliculas() {
 			boton.show();
 		}
 
-		$('.boton-pagina').click(event => {
+		$('.boton-pagina').click(() => {
 			// Cada boton tiene como funcionalidad buscarPeliculas()
 			self.buscarPeliculas($(this).attr('numero-pagina'));
 			scroll(0, 0);

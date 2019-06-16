@@ -1,9 +1,12 @@
+/* eslint-disable no-use-before-define */
+/* eslint-disable max-len */
 (function () {
 	const server = 'http://localhost:8080';
 	const params = window.location.search;
-	const id = (params.split('='))[1];
+	const { 1: id } = params.split('=');
 
 	const controladorInformacionDePelicula = new ControladorInformacionDePelicula();
+
 	controladorInformacionDePelicula.obtenerPelicula(id);
 
 	function ControladorInformacionDePelicula() {
@@ -25,11 +28,10 @@
 			$('.actores').html(actorsString.slice(0, -2));
 		};
 
-		this.obtenerPelicula = id => {
+		this.obtenerPelicula = () => {
 			const self = this;
-			$.getJSON(`${server}/pelicula/${id}`, data => {
-				self.cargarDetalle(data);
-			}).fail(() => { window.location.href = 'error.html'; });
+			$.getJSON(`${server}/pelicula/${id}`, data => { self.cargarDetalle(data); })
+				.fail(() => { window.location.href = 'error.html'; });
 		};
 	}
 }());

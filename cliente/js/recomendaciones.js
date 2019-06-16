@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+/* eslint-disable no-use-before-define */
 const servidor = 'http://localhost:8080';
 $(document).ready(() => {
 	const controladorRecomendaciones = new ControladorRecomendaciones();
@@ -9,11 +11,12 @@ function ControladorRecomendaciones() {
 
 	this.inicializarPreguntas = () => {
 		const self = this;
+
 		$('.paso-1').show();
 
 		$('.paso-1 .boton-estreno').click(() => {
-			self.anio_inicio = 2005;
-			self.anio_fin = 2020;
+			self.año_inicio = 2005;
+			self.año_fin = 2020;
 			self.cargarSegundaPregunta();
 		});
 
@@ -23,8 +26,8 @@ function ControladorRecomendaciones() {
 		});
 
 		$('.paso-1 .boton-clasico').click(() => {
-			self.anio_inicio = 1900;
-			self.anio_fin = 2005;
+			self.año_inicio = 1900;
+			self.año_fin = 2005;
 			self.cargarSegundaPregunta();
 		});
 
@@ -50,9 +53,8 @@ function ControladorRecomendaciones() {
 
 		// Se le asigna funcionalidad al boton 'Ver mas' que se va a mostrar debajo de la pelicula recomendada.
 		$('.botones-resultado .ver-mas').click(() => {
-			const id = (self.pelicula_actual).id;
+			const { id } = self.pelicula_actual;
 			window.location.href = `info.html?id=${id}`;
-			console.log(id);
 		});
 
 		// Se le asigna funcionalidad al boton 'Otra opcion' que se va a mostrar debajo de la pelicula recomendada.
@@ -87,12 +89,11 @@ function ControladorRecomendaciones() {
 		const queryParams = {};
 
 		if (this.genero) queryParams.genero = this.genero;
-		if (this.anio_inicio) queryParams.anio_inicio = this.anio_inicio;
-		if (this.anio_fin) queryParams.anio_fin = this.anio_fin;
+		if (this.año_inicio) queryParams.año_inicio = this.año_inicio;
+		if (this.año_fin) queryParams.año_fin = this.año_fin;
 		if (this.puntuacion) queryParams.puntuacion = this.puntuacion;
 
 		let query = '';
-
 
 		let ruta = '/peliculas/recomendacion';
 
@@ -143,8 +144,8 @@ function ControladorRecomendaciones() {
 	this.reiniciarRecomendacion = () => {
 		// Se borran los resultados y las respuestas anteriores
 		this.resultados = [];
-		this.anio_fin = '';
-		this.anio_inicio = '';
+		this.año_fin = '';
+		this.año_inicio = '';
 		this.genero = '';
 		this.puntuacion = '';
 		$('.datos-pelicula').hide();
@@ -159,6 +160,7 @@ function ControladorRecomendaciones() {
 			element = array[j];
 			array[j] = temp;
 		});
+
 		return array;
 	};
 }
